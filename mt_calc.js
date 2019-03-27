@@ -5,8 +5,8 @@
    Tutorial 11
    Case Problem 2
 
-   Author: 
-   Date:   
+   Author: Emmanuel Cortes
+   Date: 3.25.19  
    
    Filename: mt_calc.js
 	
@@ -37,24 +37,73 @@ window.onload = init;
 
 function init() {
       // A collection of input element with the class of calcButtons
-      var calcButtons = document.getElementsByClassName("calcButtons");
+      var calcButtons = document.getElementsByClassName("calcButton");
 
       // Runs the buttonClick() function for every click
       for (var i = 0; i < calcButtons.length; i++) {
-            calcButtons[i].addEventListener("click", buttonClick);
+            calcButtons[i].onclick = buttonClick;
       }
 
-      document.getElementById("calcWindow").addEventListener("key-down", calcKeys);
+      document.getElementById("calcWindow").onkeydown = calcKeys;
 }
 
-function buttonClick() {
-      var calcValue = document.getElementById("calcWindow").value;;
+// Will register the button that was clicked on the calculator into the window
+function buttonClick(e) {
+      // This variable will get the value of the calcWindow element ID
+      var calcValue = document.getElementById("calcWindow").value;
 
+      // This variable will get the value of the decimals element ID
       var calcDecimal = document.getElementById("decimals").value;
 
       var buttonValue = e.target.value;
-}
 
+      // This switch case will change the value of the buttonValue variable based upon the button that was clicked
+      switch (buttonValue) {
+            case "del":
+                  calcValue = "";
+                  break;
+
+            case "bksp":
+                  calcValue = eraseChar(calcValue);
+                  break;
+
+            case "enter":
+                  calcValue += "=" + evalEq(calcValue, calcDecimal) + "\n";
+                  break;
+            case "prev":
+                  calcValue += lastEq(calcValue);
+                  break;
+            default:
+                  calcValue += buttonValue;
+                  break;
+      }
+      // The value of the element ID of calcWindow is set equal to the calcValue
+      document.getElementById("calcWindow").value = calcValue;
+}
+// This command will allow for the cursor focus to be on the text area element
+document.getElementById("calcWindow").focus();
+
+// Adds functions to key pressed within the calculator window 
+function calcKeys(e) {
+      var calcValue = document.getElementById("calcWindow").value;
+
+      var calcDecimal = document.getElementById("decimals").value;
+
+      // This switch case will allow certain keys on the keyboard to set the calcValue variable equal to its appropriate value.
+      switch (e.key) {
+            case "Delete":
+                  calcValue = "";
+                  break;
+            case "Enter":
+                  calcValue += "=" + evalEq(calcValue, calcDecimal) + "\n";
+                  break;
+            case "ArrowUp":
+                  calcValue += lastEq(calcWindow.value);
+                  e.preventDefault();
+      }
+      // The calcWindow element ID is set equal to the calcValue variable
+      document.getElementById("calcWindow").value = calcValue;
+}
 
 
 
